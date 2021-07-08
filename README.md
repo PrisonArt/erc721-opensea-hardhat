@@ -1,5 +1,5 @@
 # PRISART for OpenSea
-Adapted for hardhat from https://github.com/ProjectOpenSea/opensea-creatures. Uses Arweave to store contract and image metadata.
+Adapted for hardhat from https://github.com/ProjectOpenSea/opensea-creatures. Uses IPFS to store contract and image metadata.
 
 Contract Features: Mintable with Auto Increment Ids, Burnable, Enumerable, URI Storage
 
@@ -11,8 +11,8 @@ Whitelists OpenSea's trading address
 ## Quick start
 
 ```sh
-git clone https://github.com/dynamiculture/erc721-opensea-hardhat-template
-cd erc721-opensea-hardhat-template
+git clone https://github.com/PrisonArt/erc721-opensea-hardhat
+cd erc721-opensea-hardhat
 npm i
 # list hardhat tasks:
 npx hardhat
@@ -28,7 +28,7 @@ Create free accounts on:
 * https://infura.io
 * https://etherscan.io
 
-Create .env (listed in .gitignore). **Important!** Do **not** check in .env to public repo:
+Create .env (listed in .gitignore). **Important**, **never** check in .env to public repo!
 ```sh
 cp .env.sample .env
 ```
@@ -60,12 +60,12 @@ hh run --network localhost scripts/deploy-localhost.ts
 
 ### TODO: change to IPFS
 
-Verify image and fee_recipient values in prisart-contrat.json. Deploy prisart-contract.json:
+Verify image and fee_recipient values in prisart-contract.json. Deploy prisart-contract.json:
 ```sh
 npx arweave deploy data/prisart-contract.json
 ```
 
-Update "contractURI" in contracts/PRISART.sol
+Update "contractURI" in contracts/PRISART.sol with URL result from above.
 
 ## Set up Metadata and Images for First Minted Work
 
@@ -76,7 +76,7 @@ Arweave image or video should be less than 10MB:
 npx arweave deploy assets/prisart-0.png
 ```
 
-After Arweave deployment, update value for "image" in prisart-0.json. Deploy prisart-1.json:
+After Arweave deployment, update value for "image" in prisart-0.json. Deploy prisart-0.json:
 ```sh
 npx arweave deploy data/prisart-0.json
 ```
@@ -129,7 +129,7 @@ hh verify --network mainnet --contract contracts/PRISART.sol:PRISART <contract-a
 ```
 ### Check code and abi on mainnet
 Visit the following URL, by providing the new contract address:
-https://etherscan.io/address/_contract-address__#code
+https://etherscan.io/address/_contract-address_#code
 
 ### Mint to mainnet
 ```sh
