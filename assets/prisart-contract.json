@@ -1,0 +1,8 @@
+{
+    "name": "Prison Art Collection #0",
+    "description": "Prison Art",
+    "image": "https://pr1s0n.art/images/logo.png",
+    "external_link": "https://pr1s0n.art",
+    "seller_fee_basis_points": 1000,
+    "fee_recipient": "0x4281EacAdA9d5CA30112F0658A6B2c1efD67201C"
+}
