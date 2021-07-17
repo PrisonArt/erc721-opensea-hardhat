@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-
 import "./common/meta-transactions/ContentMixin.sol";
 import "./common/meta-transactions/NativeMetaTransaction.sol";
 
@@ -45,21 +44,21 @@ abstract contract ERC721Tradable is
 
     /**
      * @dev Safely mints a token to an address with a tokenURI.
-     * @param _to address of the future owner of the token
-     * @param _metadataURI full URI to token metadata
+     * @param to address of the future owner of the token
+     * @param metadataURI full URI to token metadata
      */
-    function safeMint(address _to, string memory _metadataURI) public onlyOwner {
+    function safeMint(address to, string memory metadataURI)
+        public onlyOwner
+    {
         uint256 newTokenId = _tokenIdCounter.current();
-        _safeMint(_to, newTokenId);
-        _setTokenURI(newTokenId, _metadataURI);
+        _safeMint(to, newTokenId);
+        _setTokenURI(newTokenId, metadataURI);
         _tokenIdCounter.increment();
     }
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal override(ERC721, ERC721Enumerable) {
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal override(ERC721, ERC721Enumerable)
+    {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -109,7 +108,12 @@ abstract contract ERC721Tradable is
     /**
      * This is used instead of msg.sender as transactions won't be sent by the original token owner, but by OpenSea.
      */
-    function _msgSender() internal view override returns (address sender) {
+    function _msgSender()
+        internal
+        view
+        override
+        returns (address sender)
+    {
         return ContextMixin.msgSender();
     }
 }

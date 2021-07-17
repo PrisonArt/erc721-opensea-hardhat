@@ -70,13 +70,20 @@ Update "contractURI" in contracts/PRISART.sol with URL result from above.
 ## Set up Metadata and Images for First Minted Work
 
 ### TODO: change to IPNS
-
-Arweave image or video should be less than 10MB:
+Upload image as a 480x480 animated gif:
 ```sh
-npx arweave deploy assets/prisart-0.png
+ffmpeg -i prisart-0.mp4 -vf scale=480:-1 prisart-0.gif
+npx arweave deploy assets/prisart-0.gif
 ```
 
-After Arweave deployment, update value for "image" in prisart-0.json. Deploy prisart-0.json:
+After Arweave deployment, update "image" with the resulting Arweave URL in prisart-0.json.
+
+Upload animation_url as a 1024x1024 mp4 with vcodec H.264, pixel format YUV 4:2:0, and CRF 25. Arweave image or video should be less than 10MB:
+```sh
+npx arweave deploy assets/prisart-0.mp4
+```
+
+After Arweave deployment, update "animation_url" with the resulting Arweave URL in prisart-0.json. Deploy prisart-0.json:
 ```sh
 npx arweave deploy data/prisart-0.json
 ```
@@ -113,6 +120,13 @@ hh run --network rinkeby scripts/mint-rinkeby.ts
 
 ### Check contract on OpenSea
 Go to https://testnets.opensea.io/ connect wallet using the Rinkeby network. Choose "My Collections" and "Import an existing smart contract". Enter the Rinkeby Contract Address.
+
+### Burn Token on Rinkeby
+Verify TokenId in burn-rinkeby.ts
+```sh
+hh run --network rinkeby scripts/burn-rinkeby.ts
+```
+Token will be transferred to the zero address and marked as nonexistent token
 
 ## Deploy to mainnet
 ```sh
