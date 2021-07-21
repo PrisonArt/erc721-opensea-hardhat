@@ -8,13 +8,10 @@ import "@nomiclabs/hardhat-etherscan";
 import "hardhat-typechain";
 import "solidity-coverage";
 
-task("accounts", "Prints the list of accounts", async (args, hre) => {
-    const accounts = await hre.ethers.getSigners();
-
-    for (const account of accounts) {
-        console.log(account.address);
-    }
-});
+import "./tasks/accounts";
+import "./tasks/deployment/deploy";
+import "./tasks/operations/mint-token";
+import "./tasks/operations/burn-token";
 
 const INFURA_API_KEY = process.env.INFURA_API_KEY || "";
 const MAINNET_PRIVATE_KEY =
