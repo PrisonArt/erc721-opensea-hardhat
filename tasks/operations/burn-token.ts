@@ -4,14 +4,12 @@ import { PRISART } from "../../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { TASK_BURN } from "../task-names";
 
+import abi from '../../data/abi/PRISART.json';
+
 // hh burn-token --network rinkeby|mainnet|localhost --token-id 22
 task(TASK_BURN, "Burns a token by token id")
   .addParam("tokenId", "The token id", null, types.int)
   .setAction(async ({ tokenId }, hre) => {
-    const abi = [
-      'function burn(uint256 tokenId ) public',
-    ]
-
     let deployer: SignerWithAddress;
 
     console.log('burning:', tokenId);

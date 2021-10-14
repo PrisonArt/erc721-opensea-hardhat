@@ -8,6 +8,7 @@ import "hardhat-gas-reporter";
 import "@nomiclabs/hardhat-etherscan";
 import "hardhat-typechain";
 import "solidity-coverage";
+import 'hardhat-abi-exporter';
 
 import "./tasks/accounts";
 import "./tasks/deployment/deploy";
@@ -50,6 +51,14 @@ const config: HardhatUserConfig = {
         // Obtain one at https://etherscan.io/
         apiKey: ETHERSCAN_API_KEY,
     },
+    abiExporter: {
+        path: './data/abi',
+        clear: true,
+        flat: true,
+        only: [],
+        spacing: 2,
+        pretty: true,
+    }
 };
 
 export default config;

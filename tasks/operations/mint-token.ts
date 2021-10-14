@@ -4,15 +4,13 @@ import { PRISART } from "../../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { TASK_MINT } from "../task-names";
 
+import abi from '../../data/abi/PRISART.json';
+
 //TODO: Change metadata-uri to IPFS
 // hh mint-token --network rinkeby|mainnet|localhost --metadata-uri ar://8_NZWr4K9d6N8k4TDbMzLAkW6cNQnSQMLeoShc8komM
 task(TASK_MINT, "Mints a token with token metadata uri")
   .addParam("metadataUri", "The token URI", null, types.string)
   .setAction(async ({ metadataUri }, hre) => {
-    const abi = [
-      'function safeMint(address to, string metadataURI) public',
-    ]
-
     //TODO: Check for IPFS URI
     if (!metadataUri.startsWith("ar://")) {
       console.log('token-id must begin with ar://');
@@ -39,7 +37,13 @@ task(TASK_MINT, "Mints a token with token metadata uri")
     }
     console.log(`contractAddress: ${contractAddress}`);
 
-    const mintToAddress = process.env.MINT_TO_ADDRESS || '';
+    var mintToAddress = "";
+    if (network.name === "unknown") { //localhost network
+      mintToAddress = await deployer.getAddress();
+    } else {
+      mintToAddress = process.env.MINT_TO_ADDRESS || '';
+    }
+
     console.log(`mintToAddress: ${mintToAddress}`);
 
     const contract: PRISART = new hre.ethers.Contract(contractAddress, abi, deployer) as PRISART;

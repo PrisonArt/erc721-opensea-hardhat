@@ -81,6 +81,10 @@ update LOCALHOST_CONTRACT_ADDRESS .env with address of newly deployed contract.
 hh mint-token --network localhost --metadata-uri ar://8_NZWr4K9d6N8k4TDbMzLAkW6cNQnSQMLeoShc8komM
 ```
 
+```sh
+hh burn-token --network localhost --token-id 0
+```
+
 ## Set up Metadata for Contract
 
 ### TODO: change to IPFS
