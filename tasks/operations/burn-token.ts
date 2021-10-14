@@ -1,8 +1,9 @@
 import { task, types } from "hardhat/config";
-import { ContractTransaction } from "ethers";
+import { ContractReceipt, ContractTransaction } from "ethers";
 import { PRISART } from "../../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { TASK_BURN } from "../task-names";
+import { Network } from '@ethersproject/networks/lib/types';
 
 import abi from '../../data/abi/PRISART.json';
 
@@ -10,15 +11,14 @@ import abi from '../../data/abi/PRISART.json';
 task(TASK_BURN, "Burns a token by token id")
   .addParam("tokenId", "The token id", null, types.int)
   .setAction(async ({ tokenId }, hre) => {
-    let deployer: SignerWithAddress;
-
     console.log('burning:', tokenId);
 
-    [deployer] = await hre.ethers.getSigners();
-    const address = await deployer.getAddress();
-    console.log(`deployer address: ${address}`);
+    const wallets: SignerWithAddress[] = await hre.ethers.getSigners();
+    const deployerWallet = wallets[0];
 
-    const network = await hre.ethers.provider.getNetwork();
+    const deployerAddress = await deployerWallet.getAddress();
+
+    const network: Network = await hre.ethers.provider.getNetwork();
     console.log(`network: ${network.name}`);
 
     var contractAddress = "";
@@ -31,11 +31,28 @@ task(TASK_BURN, "Burns a token by token id")
     }
     console.log(`contractAddress: ${contractAddress}`);
 
-    const contract: PRISART = new hre.ethers.Contract(contractAddress, abi, deployer) as PRISART;
+    const contract: PRISART = new hre.ethers.Contract(contractAddress, abi, deployerWallet) as PRISART;
 
-    const receipt: ContractTransaction = await contract.connect(deployer)
-      .burn(tokenId, { gasLimit: 300000 });
+    var burnTx: ContractTransaction;
 
-    console.log('burned:', receipt);
+    try {
+      burnTx = await contract.connect(deployerWallet).burn(tokenId, { gasLimit: 300000 });
+
+      const receipt: ContractReceipt = await burnTx.wait();
+
+      if (receipt.events) {
+        const event = receipt.events.filter(e => e.event === 'Transfer')[0];
+
+        if (event.args) {
+          console.log(`Burned token #${event.args.tokenId} to ${event.args.to}`);
+        }
+      } else {
+        console.log('Burn failed');
+      }
+
+    } catch (error) {
+      console.log(`Burn of token# ${tokenId} failed with ${error}`);
+    }
+
     process.exit(0)
   });

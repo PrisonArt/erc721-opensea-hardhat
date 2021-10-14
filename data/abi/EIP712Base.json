@@ -1,5 +1,0 @@
-[
-  "function ERC712_VERSION() view returns (string)",
-  "function getChainId() view returns (uint256)",
-  "function getDomainSeperator() view returns (bytes32)"
-]

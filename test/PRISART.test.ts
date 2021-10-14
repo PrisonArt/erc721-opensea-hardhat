@@ -10,7 +10,6 @@ let prisartFactory: PRISART__factory;
 let deployer: SignerWithAddress;
 let other: SignerWithAddress;
 
-const PROXY_REGISTRATION_ADDRESS = "0xf57b2c51ded3a29e6891aba85459d600256cf317";
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 describe("prisart", () => {
@@ -22,7 +21,7 @@ describe("prisart", () => {
             deployer
         )) as PRISART__factory;
 
-        prisart = (await prisartFactory.deploy(PROXY_REGISTRATION_ADDRESS)) as PRISART;
+        prisart = (await prisartFactory.deploy()) as PRISART;
         expect(prisart.address).to.properAddress;
     });
 
@@ -85,7 +84,7 @@ describe("prisart", () => {
                 .withArgs(ZERO_ADDRESS, other.address, tokenId);
 
             await expect(prisart.connect(deployer).burn(tokenId))
-                .to.be.revertedWith('function call to a non-contract account');
+                .to.be.revertedWith('ERC721Burnable: caller is not owner nor approved');
 
             expect(await prisart.balanceOf(other.address)).to.equal(1);
             expect(await prisart.totalSupply()).to.equal(1);

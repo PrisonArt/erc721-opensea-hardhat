@@ -1,8 +1,9 @@
 import { task, types } from "hardhat/config";
-import { ContractTransaction } from "ethers";
+import { ContractReceipt, ContractTransaction } from "ethers";
 import { PRISART } from "../../typechain";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { TASK_MINT } from "../task-names";
+import { Network } from '@ethersproject/networks/lib/types';
 
 import abi from '../../data/abi/PRISART.json';
 
@@ -18,13 +19,10 @@ task(TASK_MINT, "Mints a token with token metadata uri")
     }
     console.log('mintTokenURI:', metadataUri)
 
-    let deployer: SignerWithAddress;
+    const wallets: SignerWithAddress[] = await hre.ethers.getSigners();
+    const deployerWallet = wallets[0];
 
-    [deployer] = await hre.ethers.getSigners();
-    const address = await deployer.getAddress();
-    console.log(`deployer address: ${address}`);
-
-    const network = await hre.ethers.provider.getNetwork();
+    const network: Network = await hre.ethers.provider.getNetwork();
     console.log(`network: ${network.name}`);
 
     var contractAddress = "";
@@ -39,18 +37,27 @@ task(TASK_MINT, "Mints a token with token metadata uri")
 
     var mintToAddress = "";
     if (network.name === "unknown") { //localhost network
-      mintToAddress = await deployer.getAddress();
+      mintToAddress = await deployerWallet.getAddress();
     } else {
       mintToAddress = process.env.MINT_TO_ADDRESS || '';
     }
 
-    console.log(`mintToAddress: ${mintToAddress}`);
+    const contract: PRISART = new hre.ethers.Contract(contractAddress, abi, deployerWallet) as PRISART;
 
-    const contract: PRISART = new hre.ethers.Contract(contractAddress, abi, deployer) as PRISART;
-
-    const receipt: ContractTransaction = await contract.connect(deployer)
+    const mintTx: ContractTransaction = await contract.connect(deployerWallet)
       .safeMint(mintToAddress, metadataUri, { gasLimit: 300000 });
 
-    console.log('minted:', receipt);
+    const receipt: ContractReceipt = await mintTx.wait();
+
+    if (receipt.events) {
+      const event = receipt.events.filter(e => e.event === 'Transfer')[0];
+
+      if (event.args) {
+        console.log(`Minted token #${event.args.tokenId} to ${mintToAddress}`);
+      }
+    } else {
+      console.log('Mint failed to ${mintToAddress}');
+    }
+
     process.exit(0)
   });

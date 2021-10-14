@@ -1,8 +1,0 @@
-[
-  "event MetaTransactionExecuted(address userAddress, address relayerAddress, bytes functionSignature)",
-  "function ERC712_VERSION() view returns (string)",
-  "function executeMetaTransaction(address userAddress, bytes functionSignature, bytes32 sigR, bytes32 sigS, uint8 sigV) payable returns (bytes)",
-  "function getChainId() view returns (uint256)",
-  "function getDomainSeperator() view returns (bytes32)",
-  "function getNonce(address user) view returns (uint256 nonce)"
-]

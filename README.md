@@ -1,12 +1,10 @@
-# PR1S0N ART NFT Contract for OpenSea
+# PR1S0N ART NFT Contract
 
-Adapted for hardhat from <https://github.com/ProjectOpenSea/opensea-creatures>. Uses IPFS to store contract and image metadata.
+Uses IPFS to store contract and image metadata.
 
 Contract Features: Mintable with Auto Increment Ids, Burnable, Enumerable, URI Storage
 
 Access Control: Ownable
-
-Whitelists OpenSea's trading address
 
 ## Quick start
 
@@ -145,10 +143,10 @@ Note the deployed contract's address and update value in .env:
 
 ### Verify on Rinkeby
 
-Run the following command, by providing the new contract address. The last value is a constructor argument, OpenSea's proxy address on Rinkeby:
+Run the following command, by providing the new contract address:
 
 ```sh
-hh verify --network rinkeby --contract contracts/PRISART.sol:PRISART <contract-address> 0xf57b2c51ded3a29e6891aba85459d600256cf317
+hh verify --network rinkeby --contract contracts/PRISART.sol:PRISART <contract-address>
 ```
 
 ### Check code and abi on Rinkeby
@@ -168,8 +166,6 @@ Go to <https://testnets.opensea.io/> connect wallet using the Rinkeby network. C
 
 ### Burn Token on Rinkeby
 
-Verify TokenId in burn-rinkeby.ts
-
 ```sh
 hh burn-token --network rinkeby --token-id 22
 ```
@@ -188,10 +184,10 @@ note the depoloyed contract's address and update value in .env:
 
 ### Verify on mainnet
 
-Run the following command, by providing the new contract address. The last value is a constructor argument, OpenSea's proxy address on mainnet:
+Run the following command, by providing the new contract address:
 
 ```sh
-hh verify --network mainnet --contract contracts/PRISART.sol:PRISART <contract-address> 0xa5409ec958c83c3f309868babaca7c86dcb077c1
+hh verify --network mainnet --contract contracts/PRISART.sol:PRISART <contract-address>
 ```
 
 ### Check code and abi on mainnet
