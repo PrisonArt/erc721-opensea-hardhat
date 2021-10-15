@@ -213,6 +213,11 @@ Token will be transferred to the zero address and marked as nonexistent token
 
 Go to <https://opensea.io/> and connect wallet using the mainnet network. Choose "My Collections" and "Import an existing smart contract". Enter the mainnet Contract Address.
 
+## Recommended Visual Studio Code Extensions
+
+* <https://github.com/juanfranblanco/vscode-solidity> by Juan Blanco
+* ESLint by Dirk Baeumer
+
 ## References
 
 <https://github.com/Dynamiculture/erc721-opensea-hardhat-template>
